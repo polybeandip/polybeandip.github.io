@@ -52,8 +52,6 @@
 \newcommand*{\headersocialstyle}[1]{{\fontsize{8pt}{1em}\headerfontlight\color{graytext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
 \newcommand*{\sectionstyle}[1]{{\fontsize{14pt}{1em}\bodyfont\bfseries\color{text} #1}}
-\newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{text}{#1}}}
-\newcommand*{\paragraphstyle}{\fontsize{9pt}{1em}\bodyfontlight\upshape\color{text}}
 
 % For elements of project
 \newcommand*{\projectpositionstyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{graytext} #1}}
@@ -182,56 +180,42 @@
 }
 
 \newcommand*{\makecvfooter}[3]{
-  \fancyfoot{}
-  \fancyfoot[L]{\footerstyle{#1}}
-  \fancyfoot[C]{\footerstyle{#2}}
-  \fancyfoot[R]{\footerstyle{#3}}
+    \fancyfoot{}
+    \fancyfoot[L]{\footerstyle{#1}}
+    \fancyfoot[C]{\footerstyle{#2}}
+    \fancyfoot[R]{\footerstyle{#3}}
 }
 
-\newcommand{\cvsection}[1]{%
-  \vspace{\acvSectionTopSkip}
-  \sectionstyle{#1}
-  \phantomsection
-  \color{sectiondivider}\vhrulefill{0.9pt}
+\newcommand{\cvsection}[1]{
+    \vspace{\acvSectionTopSkip}
+    \sectionstyle{#1}
+    \phantomsection
+    \color{sectiondivider}\vhrulefill{0.9pt}
 }
 
-\newcommand{\cvsubsection}[1]{%
-  \vspace{\acvSectionContentTopSkip}
-  \vspace{-3mm}
-  \subsectionstyle{#1}
-  \phantomsection
+
+\newenvironment{cventries}{
+    \vspace{\acvSectionContentTopSkip}
+    \begin{center}
+}
+{
+    \end{center}
 }
 
-\newenvironment{cvparagraph}{%
-  \vspace{\acvSectionContentTopSkip}
-  \vspace{-3mm}
-  \paragraphstyle
-}{%
-  \par
-  \vspace{2mm}
-}
-
-\newenvironment{cventries}{%
-  \vspace{\acvSectionContentTopSkip}
-  \begin{center}
-}{%
-  \end{center}
-}
-
-\newcommand*{\cventry}[5]{%
-  \vspace{-2.0mm}
-  \setlength\tabcolsep{0pt}
-  \setlength{\extrarowheight}{0pt}
-  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+\newcommand*{\cventry}[5]{
+    \vspace{-2.0mm}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
         \entrytitlestyle{#2} & \entrylocationstyle{#3} \\[4pt]
         \entrypositionstyle{#1} & \entrydatestyle{#4} \\
         \ifstrempty{#5}
         {}
         {\multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}} \\}
-  \end{tabular*}%
+    \end{tabular*}
 }
 
-\newcommand*{\triplethreat}[9]{%
+\newcommand*{\triplethreat}[9]{
     \vspace{-2.0mm}
     \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
@@ -243,52 +227,54 @@
         \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#6}} \\
         \entrypositionstyle{#7} & \entrydatestyle{#8} \\
         \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#9}}\\
-  \end{tabular*}%
+    \end{tabular*}
 }
 
-\newcommand*{\project}[3]{%
+\newcommand*{\project}[3]{
     \vspace{-2.0mm}
     \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
     \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
         \projectpositionstyle{#1} & \projectdatestyle{#2} \\
         \multicolumn{2}{L{\textwidth}}{\projectdescriptionstyle{#3}} \\
-  \end{tabular*}%
-}
-
-\newenvironment{cvhonors}{%
-  \vspace{\acvSectionContentTopSkip}
-  \vspace{-2mm}
-  \begin{center}
-    \setlength\tabcolsep{0pt}
-    \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
-}{%
     \end{tabular*}
-  \end{center}
 }
 
-\newcommand*{\cvhonor}[4]{%
-  \honordatestyle{#4} & \honorpositionstyle{#1}\ifempty{#2}{}{,} \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+\newenvironment{cvhonors}{
+    \vspace{\acvSectionContentTopSkip}
+    \vspace{-2mm}
+    \begin{center}
+        \setlength\tabcolsep{0pt}
+        \setlength{\extrarowheight}{0pt}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
+}
+{
+        \end{tabular*}
+    \end{center}
 }
 
-\newenvironment{cvskills}{%
-  \vspace{-3.5mm}
-  \begin{center}
-    \setlength\tabcolsep{1ex}
-    \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
-}{%
-    \end{tabular*}
-  \end{center}
+\newcommand*{\cvhonor}[4]{
+    \honordatestyle{#4} & \honorpositionstyle{#1}\ifempty{#2}{}{,} \honortitlestyle{#2} & \honorlocationstyle{#3} \\
 }
 
-\newcommand*{\cvdetail}[2]{%
-	\detailtypestyle{#1} & \detailsetstyle{#2} \\
+\newenvironment{cvskills}{
+    \vspace{-3.5mm}
+    \begin{center}
+        \setlength\tabcolsep{1ex}
+        \setlength{\extrarowheight}{0pt}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
+}
+{
+        \end{tabular*}
+    \end{center}
 }
 
-\newcommand*{\cvskill}[2]{%
-	\skilltypestyle{#1} & \skillsetstyle{#2} \\
+\newcommand*{\cvdetail}[2]{
+    \detailtypestyle{#1} & \detailsetstyle{#2} \\
+}
+
+\newcommand*{\cvskill}[2]{
+    \skilltypestyle{#1} & \skillsetstyle{#2} \\
 }
 
 \newenvironment{cvitems}{
@@ -328,7 +314,7 @@
     }
         {Cornell University} 
         {Ithaca, NY} 
-        {August 2021 - December 2025} 
+        {August 2021 - December 2025} % needs to be tweaked
         {
             \begin{cvskills}
                 \cvdetail{Organizations}
@@ -347,12 +333,15 @@
                 \cvdetail{Undergrad Coursework}
                 {
                     % CS classes
-                    Algorithms, 
+                    % Algorithms, 
                     Computer Architecture, 
+                    % Computer Organization, 
                     Discrete Structures, 
                     Functional Programming, 
                     % Natural Language Processing, 
-                    Operating Systems,
+                    Object Oriented Programming, 
+                    Operating Systems %,
+                    % Programming Languages
                     % Math classes
                     % Combinatorics, 
                     % Complex Analysis, 
@@ -457,7 +446,7 @@
         \href{https://www.cs.cornell.edu/courses/cs5414/2024sp/}{CS 5414} Distributed Computing Principles.
         \vspace{4.0mm}
         \begin{cvitems}
-            \item Keys grouped into ``shards", managed by different replica groups that provide consensus via a custom implementation of 
+            \item Keys grouped into ``shards", each managed by different replica groups that provide consensus via a custom implementation of 
                 \href{https://www.cs.cornell.edu/home/rvr/Paxos/paxos.pdf}{multi-Paxos}.
             \item Multi-key transactions handled via the three-phase commit protocol.
         \end{cvitems}

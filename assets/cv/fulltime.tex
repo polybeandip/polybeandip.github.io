@@ -1,0 +1,526 @@
+% !TEX program = xelatex
+\documentclass{article}
+
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage{ifxetex}
+\usepackage{xifthen}
+\usepackage{xstring}
+\usepackage{etoolbox}
+\usepackage{setspace}
+\usepackage{fontawesome5}
+\usepackage{roboto}
+\usepackage[default,opentype]{sourcesanspro}
+\usepackage{parskip}
+\usepackage[unicode,pdfpagelabels=false]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    allcolors = white-yellow-red
+}
+\usepackage{tipa}
+\usepackage{bookmark}
+
+
+% Page Layout
+\usepackage
+    [left=1cm, top=1.5cm, right=1cm, bottom=2.0cm, footskip=.5cm]
+    {geometry}
+
+% Header & Footer
+\usepackage{fancyhdr}
+\fancyhfoffset{0em}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhf{}
+\pagestyle{fancy}
+
+%-------------------------------------------------------------------------------
+%                Configuration for fonts
+%-------------------------------------------------------------------------------
+\newcommand*{\headerfont}{\roboto}
+\newcommand*{\headerfontlight}{\robotolight}
+\newcommand*{\footerfont}{\sourcesanspro}
+\newcommand*{\bodyfont}{\sourcesanspro}
+\newcommand*{\bodyfontlight}{\sourcesansprolight}
+
+
+%-------------------------------------------------------------------------------
+%                Configuration for styles
+%-------------------------------------------------------------------------------
+\newcommand*{\headernamestyle}[1]{{\fontsize{22pt}{1em}\headerfont\bfseries\color{text} #1}}
+\newcommand*{\headeripastyle}[1]{{\fontsize{14pt}{1em}\headerfont\color{text} #1}}
+\newcommand*{\headersocialstyle}[1]{{\fontsize{8pt}{1em}\headerfontlight\color{graytext} #1}}
+\newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
+\newcommand*{\sectionstyle}[1]{{\fontsize{14pt}{1em}\bodyfont\bfseries\color{text} #1}}
+
+% For elements of project
+\newcommand*{\projectpositionstyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{graytext} #1}}
+\newcommand*{\projectdatestyle}[1]{{\fontsize{8.5pt}{1em}\bodyfont\slshape\color{darktext} #1}}
+\newcommand*{\projectdescriptionstyle}[1]{{\fontsize{8.5pt}{1em}\bodyfont\upshape\color{text} #1}}
+
+% For elements of entry
+\newcommand*{\entrytitlestyle}[1]{{\fontsize{12pt}{1em}\bodyfont\bfseries\color{graytext} #1}}
+\newcommand*{\entrypositionstyle}[1]{{\fontsize{9pt}{1em}\bodyfont\color{darktext} #1}}
+\newcommand*{\entrydatestyle}[1]{{\fontsize{8.5pt}{1em}\bodyfont\slshape\color{darktext} #1}}
+\newcommand*{\entrylocationstyle}[1]{{\fontsize{9.5pt}{1em}\bodyfont\slshape\color{darktext} #1}}
+\newcommand*{\descriptionstyle}[1]{{\fontsize{8.5pt}{1em}\bodyfont\upshape\color{text} #1}}
+
+% For elements of honor
+\newcommand*{\honortitlestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\color{graytext} #1}}
+\newcommand*{\honorpositionstyle}[1]{{\fontsize{9pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
+\newcommand*{\honordatestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\color{graytext} #1}}
+\newcommand*{\honorlocationstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\slshape\color{awesome} #1}}
+
+% For elements of skill
+\newcommand*{\detailtypestyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\bfseries\color{graytext} #1}}
+\newcommand*{\detailsetstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\color{text} #1}}
+\newcommand*{\skilltypestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\bfseries\color{graytext} #1}}
+\newcommand*{\skillsetstyle}[1]{{\fontsize{9pt}{1em}\bodyfont\color{text} #1}}
+
+%-------------------------------------------------------------------------------
+%                Configuration for colors
+%-------------------------------------------------------------------------------
+\usepackage[svgnames, dvipsnames]{xcolor}
+
+% Page background
+\definecolor{white-yellow}{HTML}{FFF9F4}
+% Link color
+\definecolor{white-yellow-red}{HTML}{FF1010}
+% Gray-scale colors
+\definecolor{white}{HTML}{FFFFFF}
+\definecolor{black}{HTML}{000000}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{gray}{HTML}{5D5D5D}
+\definecolor{lightgray}{HTML}{999999}
+% Basic colors
+\definecolor{green}{HTML}{C2E15F}
+\definecolor{orange}{HTML}{FDA333}
+\definecolor{purple}{HTML}{D3A4F9}
+\definecolor{red}{HTML}{FB4485}
+\definecolor{blue}{HTML}{6CE0F1}
+% Text colors
+\definecolor{darktext}{HTML}{414141}
+\colorlet{text}{darkgray}
+\colorlet{graytext}{gray}
+\colorlet{lighttext}{lightgray}
+\colorlet{sectiondivider}{gray}
+\colorlet{saved}{.}
+
+%-------------------------------------------------------------------------------
+%                Commands for personal information
+%-------------------------------------------------------------------------------
+\makeatletter
+
+\newcommand*{\name}[1]{\def\@name{#1}}
+\newcommand*{\ipa}[1]{\def\@ipa{#1}}
+\newcommand*{\mobile}[1]{
+    \def\@mobile{#1}
+    \def\@teluri{tel:\@mobile}
+    % Strip unwanted characters
+    \StrDel{\@teluri}{ }[\@teluri]%
+    \StrDel{\@teluri}{-}[\@teluri]%
+    \StrDel{\@teluri}{(}[\@teluri]%
+    \StrDel{\@teluri}{)}[\@teluri]%
+}
+\newcommand*{\email}[1]{\def\@email{#1}}
+\newcommand*{\homepage}[1]{\def\@homepage{#1}}
+\newcommand*{\github}[1]{\def\@github{#1}}
+
+%-------------------------------------------------------------------------------
+%                Commands for extra
+%-------------------------------------------------------------------------------
+% Header
+\newcommand{\acvHeaderNameDelim}{\space}
+\newcommand{\acvHeaderAfterNameSkip}{.4mm}
+\newcommand{\acvHeaderAfterPositionSkip}{.4mm}
+\newcommand{\acvHeaderAfterAddressSkip}{-.5mm}
+\newcommand{\acvHeaderIconSep}{\space\space}
+\newcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+\newcommand{\acvHeaderAfterSocialSkip}{6mm}
+\newcommand{\acvHeaderAfterQuoteSkip}{5mm}
+
+% Others
+\newcommand{\acvSectionTopSkip}{3mm}
+\newcommand{\acvSectionContentTopSkip}{2.5mm}
+
+%-------------------------------------------------------------------------------
+%                Commands for utilities
+%-------------------------------------------------------------------------------
+% to align an element of tabular table
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% to draw horizontal line with specific thickness
+\def\vhrulefill#1{\leavevmode\leaders\hrule\@height#1\hfill \kern\z@}
+
+% to execute conditional statements by checking empty string
+\newcommand*{\ifempty}[3]{\ifthenelse{\isempty{#1}}{#2}{#3}}
+
+%-------------------------------------------------------------------------------
+%                Commands for elements of CV structure
+%-------------------------------------------------------------------------------
+
+\newcommand*{\makecvheader}{
+    \begin{minipage}{0.5\textwidth}
+        \raggedright
+        \headernamestyle{\@name}\\
+        \headeripastyle{\@ipa}
+    \end{minipage}%
+    \begin{minipage}{0.5\textwidth}
+        \raggedleft
+        \headersocialstyle{
+            \hypersetup{allcolors=saved}
+            \href{\@teluri}{\faMobile\acvHeaderIconSep\@mobile}\\
+            \href{mailto:\@email}{\faEnvelope\acvHeaderIconSep\@email}\\
+            \href{\@homepage}{\faHome\acvHeaderIconSep\@homepage\acvHeaderIconSep}
+            \href{https://github.com/\@github}{\faGithub \acvHeaderIconSep \@github}
+        } 
+    \end{minipage}
+}
+
+\newcommand*{\makecvfooter}[3]{
+    \fancyfoot{}
+    \fancyfoot[L]{\footerstyle{#1}}
+    \fancyfoot[C]{\footerstyle{#2}}
+    \fancyfoot[R]{\footerstyle{#3}}
+}
+
+\newcommand{\cvsection}[1]{
+    \vspace{\acvSectionTopSkip}
+    \sectionstyle{#1}
+    \phantomsection
+    \color{sectiondivider}\vhrulefill{0.9pt}
+}
+
+
+\newenvironment{cventries}{
+    \vspace{\acvSectionContentTopSkip}
+    \begin{center}
+}
+{
+    \end{center}
+}
+
+\newcommand*{\cventry}[5]{
+    \vspace{-2.0mm}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+        \entrytitlestyle{#2} & \entrylocationstyle{#3} \\[4pt]
+        \entrypositionstyle{#1} & \entrydatestyle{#4} \\
+        \ifstrempty{#5}
+        {}
+        {\multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}} \\}
+    \end{tabular*}
+}
+
+\newcommand*{\triplethreat}[9]{
+    \vspace{-2.0mm}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+        \entrytitlestyle{Cornell University, Computing and Information Sciences} & \entrylocationstyle{Ithaca, NY} \\[5pt]
+        \entrypositionstyle{#1} & \entrydatestyle{#2} \\
+        \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#3}} \\
+        \entrypositionstyle{#4} & \entrydatestyle{#5} \\
+        \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#6}} \\
+        \entrypositionstyle{#7} & \entrydatestyle{#8} \\
+        \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#9}}\\
+    \end{tabular*}
+}
+
+\newcommand*{\project}[3]{
+    \vspace{-2.0mm}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+        \projectpositionstyle{#1} & \projectdatestyle{#2} \\
+        \multicolumn{2}{L{\textwidth}}{\projectdescriptionstyle{#3}} \\
+    \end{tabular*}
+}
+
+\newenvironment{cvhonors}{
+    \vspace{\acvSectionContentTopSkip}
+    \vspace{-2mm}
+    \begin{center}
+        \setlength\tabcolsep{0pt}
+        \setlength{\extrarowheight}{0pt}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
+}
+{
+        \end{tabular*}
+    \end{center}
+}
+
+\newcommand*{\cvhonor}[4]{
+    \honordatestyle{#4} & \honorpositionstyle{#1}\ifempty{#2}{}{,} \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+}
+
+\newenvironment{cvskills}{
+    \vspace{-3.5mm}
+    \begin{center}
+        \setlength\tabcolsep{1ex}
+        \setlength{\extrarowheight}{0pt}
+        \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
+}
+{
+        \end{tabular*}
+    \end{center}
+}
+
+\newcommand*{\cvdetail}[2]{
+    \detailtypestyle{#1} & \detailsetstyle{#2} \\
+}
+
+\newcommand*{\cvskill}[2]{
+    \skilltypestyle{#1} & \skillsetstyle{#2} \\
+}
+
+\newenvironment{cvitems}{
+    \vspace{-4.0mm}
+    \begin{justify}
+    \begin{itemize}[leftmargin=3ex, nosep, noitemsep]
+    \setlength{\parskip}{0pt}
+}
+{
+    \end{itemize}
+    \end{justify}
+    \vspace{-4.0mm}
+}
+
+%-------------------------------------------------------------------------------
+
+\name{Akash Dhiraj}
+\ipa{\textipa{/A:kA:S/} \hspace{0.3cm} \textipa{/dI:rA:dZ/}}
+\mobile{(+1) 669-295-8935}
+\homepage{https://akashdhiraj.com}
+\email{akashdhiraj2019@gmail.com}
+\github{polybeandip}
+
+\begin{document}
+
+\pagecolor{white-yellow}
+
+\makecvheader
+
+\cvsection{Education}
+
+\begin{cventries}
+    \cventry
+    {
+        B.A. in Computer Science \& B.A. in Mathematics
+        \vspace{1.5mm}
+    }
+        {Cornell University} 
+        {Ithaca, NY} 
+        {August 2021 - December 2024}
+        {
+            \begin{cvskills}
+                \cvdetail{Organizations}
+                {
+                    \href{https://capra.cs.cornell.edu/}{Capra Research Group},
+                    \href{https://cornellcomputerreuse.org/}{Computer Reuse Association}
+                }
+                \cvdetail{Graduate Coursework}
+                {
+                    Algorithms, 
+                    Compilers,
+                    Distributed Systems, 
+                    Parallel Computing,
+                    Programming Languages
+                }
+                \cvdetail{Undergrad Coursework}
+                {
+                    % CS classes
+                    % Algorithms, 
+                    Computer Architecture, 
+                    % Computer Organization, 
+                    Discrete Structures, 
+                    Functional Programming, 
+                    % Natural Language Processing, 
+                    Object Oriented Programming, 
+                    Operating Systems %,
+                    % Programming Languages
+                    % Math classes
+                    % Combinatorics, 
+                    % Complex Analysis, 
+                    % Honors Abstract Algebra, 
+                    % Honors Linear Algebra, 
+                    % Honors Real Analysis
+                }
+                \cvdetail{GPA}
+                {
+                    3.7/4.0 (Dean's List Recipient)
+                }
+            \end{cvskills}
+        }
+\end{cventries}
+
+\cvsection{Experience}
+
+\begin{cventries}
+    \triplethreat
+        {
+            Research Assistant, 
+            Programming Languages and Computer Architecture @ \href{https://capra.cs.cornell.edu/}{Capra}, 
+            Advised by \href{https://www.cs.cornell.edu/~asampson/}{Dr. Adrian Sampson}
+        }
+        {May 2024 -- Present}
+        {
+            \begin{cvitems}
+                \item Developed \emph{Rio}, a domain specific language for describing packet scheduling policies, written in OCaml.
+                \item Wrote a compiler from Rio to Calyx (hardware description language developed at Capra), thereby implementing packet scheduling policies in hardware.
+                \item Wrote a ``topology to topology" compiler to convert between Rio programs, as described by \href{https://dl.acm.org/doi/10.1145/3622845}{Mohan et al.}
+                \item Contributed to the \href{https://calyxir.org/}{Calyx project} by extending Calyx-Py, a Python generator for Calyx programs.
+            \end{cvitems}
+        }
+        {
+            Teaching Assistant, 
+            \href{https://www.cs.cornell.edu/courses/cs3410/2024fa/}{CS 3410} Computer System Organization, 
+            Taught by 
+            \href{https://www.cs.cornell.edu/~asampson/}{Dr. Adrian Samspson} 
+            and 
+            \href{https://giuliaguidi.github.io/}{Dr. Giulia Guidi}
+        }
+        {August 2024 -- Present} 
+        {
+            \begin{cvitems}
+                \item Held office hours and labs for 6+ hours per week, graded, demoed, and provided feedback for both assignments and labs, and proctored exams.
+                \item Setup infrastructure for automatic grading.
+            \end{cvitems}
+        }
+        {
+            Head Teaching Assistant,
+            \href{https://www.cs.cornell.edu/courses/cs3110/2024fa/}{CS 3110} Functional Programming, 
+            Taught by 
+            \href{https://sites.coecis.cornell.edu/clarkson/}{Dr. Michael Clarkson}
+        }
+        {August 2023 -- May 2024}
+        {
+            \begin{cvitems}
+                \item Held office hours and labs for 6+ hours per week, designed, graded, and provided feedback for both assignments and labs, and proctored exams.
+                \item Ran TA meetings to prepare fellow teaching assistants for assignments, labs, and office hours.
+                \item Guided multiple teams of four students in completing their final class project.
+                \item Received a faculty-nominated CS Course Staff Exceptional Service Award!
+            \end{cvitems}
+            \vspace{1.0mm}
+        }
+
+    \cventry
+    {
+        Teaching Assistant, \href{https://classes.cornell.edu/browse/roster/FA22/class/MATH/1110}{Math 1110} Calculus I
+    } 
+        {Cornell University, Math Department}
+        {Ithaca, NY} 
+        {August 2022 -- December 2022} 
+        {
+            \begin{cvitems}
+                \item Held office hours for 2+ hours per week, and graded and provided feedback for weekly homework assignments.
+            \end{cvitems}
+        }
+\end{cventries}
+
+\cvsection{Projects}
+
+\begin{cventries}
+    \project{Multicore Processor}
+    {August 2024}
+    {
+        Culmination of a semester of 
+        \href{https://www.csl.cornell.edu/courses/ece4750/schedule.shtml}{CS 4420} Computer Architecture 
+        labs.
+        \vspace{4.0mm}
+        \begin{cvitems}
+            \item Iterative multiplier/divider, 5-stage pipelined processor with stall/bypass logic, direct-mapped cache, and memory network all implemented in Verilog.
+            \item Accompanied by various multithreaded programs to be run on the processor.
+        \end{cvitems}
+    }
+
+    \project{Fault-Tolerant Sharded Linearizable Distributed Key-Value Store}
+    {April 2024}
+    {
+        Key-value store, built over the 
+        \href{https://github.com/emichael/dslabs}{DSLabs} framework 
+        for 
+        \href{https://www.cs.cornell.edu/courses/cs5414/2024sp/}{CS 5414} Distributed Computing Principles.
+        \vspace{4.0mm}
+        \begin{cvitems}
+            \item Keys grouped into ``shards", each managed by different replica groups that provide consensus via a custom implementation of 
+                \href{https://www.cs.cornell.edu/home/rvr/Paxos/paxos.pdf}{multi-Paxos}.
+            \item Multi-key transactions handled via the three-phase commit protocol.
+        \end{cvitems}
+    }
+
+    \project{Operating System}
+    {January 2024}
+    {
+        Key parts of EGOS, a miniature operating system designed for 
+        \href{https://www.cs.cornell.edu/courses/cs4411/2024sp/}{CS 4411} Operating System Practicum.
+        \vspace{4.0mm}
+        \begin{cvitems}
+            \item User space multi-threading package, RISC-V memory protection setup, disk cache, and FAT file system all implemented in C.
+        \end{cvitems}
+    }
+
+    \project{Where's My Class}
+    {August 2023}
+    {
+        Web application for Cornell students to visualize class locations on a map and plot routes between them.
+        \vspace{4.0mm}
+        \begin{cvitems}
+            \item UI built with ReactJS and application state managed through Redux.
+            \item Course data fetched with 
+                \href
+                {https://classes.cornell.edu/content/FA23/api-details}
+                {Cornell's Course Roster API}
+                and updated monthly with Github Actions.
+            \item Map and routing data generated through 
+                \href
+                {https://docs.mapbox.com/api/overview/}
+                {Mapbox's web services APIs}.
+        \end{cvitems}
+        \vspace{4.0mm}
+        View \href{https://github.com/polybeandip/wheres-my-class}{repository} or \href{https://akashdhiraj.com/wheres-my-class/}{website}
+    }
+\end{cventries}
+
+\cvsection{Skills}
+
+\vspace{3.5mm}
+
+\begin{cvskills}
+  \cvskill
+    {Languages}
+    {
+        Bash, 
+        C, 
+        C++, 
+        Java, 
+        Javascript/HTML/CSS, 
+        \LaTeX, 
+        OCaml, 
+        Python, 
+        Rust, 
+        Verilog,
+        % Natural Languages
+        English,
+        American Sign Language,
+        Spanish
+    }
+
+  \cvskill
+    {Frameworks/Libraries} 
+    {Node, NumPy, Pandas, PyTorch, ReactJS, Redux, Scikit-Learn, Yacc} 
+
+  \cvskill
+    {Tools} 
+    {Docker, Flask, Git, GitHub, Linux (Arch and Ubuntu), Unix, Vim}
+\end{cvskills}
+
+\makecvfooter
+    {Last Updated: \today}
+    {}
+    {Please Hire Me!}
+
+\end{document}

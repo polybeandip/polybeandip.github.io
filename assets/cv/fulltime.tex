@@ -49,7 +49,7 @@
 %-------------------------------------------------------------------------------
 \newcommand*{\headernamestyle}[1]{{\fontsize{22pt}{1em}\headerfont\bfseries\color{text} #1}}
 \newcommand*{\headeripastyle}[1]{{\fontsize{14pt}{1em}\headerfont\color{text} #1}}
-\newcommand*{\headersocialstyle}[1]{{\fontsize{8pt}{1em}\headerfontlight\color{graytext} #1}}
+\newcommand*{\headersocialstyle}[1]{{\fontsize{9pt}{1em}\headerfontlight\color{graytext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
 \newcommand*{\sectionstyle}[1]{{\fontsize{14pt}{1em}\bodyfont\bfseries\color{text} #1}}
 
@@ -171,9 +171,9 @@
         \raggedleft
         \headersocialstyle{
             \hypersetup{allcolors=saved}
-            \href{\@teluri}{\faMobile\acvHeaderIconSep\@mobile}\\
+            \color{black} U.S. Citizen\\
             \href{mailto:\@email}{\faEnvelope\acvHeaderIconSep\@email}\\
-            \href{\@homepage}{\faHome\acvHeaderIconSep\@homepage\acvHeaderIconSep}
+            \href{\@teluri}{\faMobile\acvHeaderIconSep\@mobile} \hspace{1mm}
             \href{https://github.com/\@github}{\faGithub \acvHeaderIconSep \@github}
         } 
     \end{minipage}
@@ -322,7 +322,7 @@
                     \href{https://capra.cs.cornell.edu/}{Capra Research Group},
                     \href{https://cornellcomputerreuse.org/}{Computer Reuse Association}
                 }
-                \cvdetail{Graduate Coursework}
+                \cvdetail{Graduate CS Coursework}
                 {
                     Algorithms, 
                     Compilers,
@@ -330,7 +330,7 @@
                     Parallel Computing,
                     Programming Languages
                 }
-                \cvdetail{Undergrad Coursework}
+                \cvdetail{Undergraduate CS Coursework}
                 {
                     % CS classes
                     % Algorithms, 
@@ -349,6 +349,16 @@
                     % Honors Linear Algebra, 
                     % Honors Real Analysis
                 }
+                \cvdetail{Undergraduate Math Coursework}
+                {
+                    % Math classes
+                    Combinatorics, 
+                    Complex Analysis, 
+                    Honors Abstract Algebra, 
+                    Honors Real Analysis,
+                    Linear Algebra,
+                    Multivariable Calculus
+                }
                 \cvdetail{GPA}
                 {
                     3.7/4.0 (Dean's List Recipient)
@@ -356,6 +366,8 @@
             \end{cvskills}
         }
 \end{cventries}
+
+\vspace{-5mm}
 
 \cvsection{Experience}
 
@@ -369,10 +381,12 @@
         {May 2024 -- Present}
         {
             \begin{cvitems}
+                \item Fulltime Researcher from January 2025 -- Present
                 \item Developed \emph{Rio}, a domain specific language for describing packet scheduling policies, written in OCaml.
-                \item Wrote a compiler from Rio to Calyx (hardware description language developed at Capra), thereby implementing packet scheduling policies in hardware.
+                \item Wrote a compiler from Rio to \href{https://github.com/calyxir/calyx}{Calyx} (hardware description language developed at Capra, similar to Verilog).
+                \item Implemented packet scheduling policies in hardware through Calyx.
                 \item Wrote a ``topology to topology" compiler to convert between Rio programs, as described by \href{https://dl.acm.org/doi/10.1145/3622845}{Mohan et al.}
-                \item Contributed to the \href{https://calyxir.org/}{Calyx project} by extending Calyx-Py, a Python generator for Calyx programs.
+                \item Contributed to the open-source \href{https://calyxir.org/}{Calyx project}.
             \end{cvitems}
         }
         {
@@ -383,7 +397,7 @@
             and 
             \href{https://giuliaguidi.github.io/}{Dr. Giulia Guidi}
         }
-        {August 2024 -- Present} 
+        {August 2024 -- December 2024} 
         {
             \begin{cvitems}
                 \item Held office hours and labs for 6+ hours per week, graded, demoed, and provided feedback for both assignments and labs, and proctored exams.
@@ -421,11 +435,13 @@
         }
 \end{cventries}
 
+\vspace{-3mm}
+
 \cvsection{Projects}
 
 \begin{cventries}
     \project{Multicore Processor}
-    {August 2024}
+    {November 2024}
     {
         Culmination of a semester of 
         \href{https://www.csl.cornell.edu/courses/ece4750/}{CS 4420} Computer Architecture 
@@ -438,7 +454,7 @@
     }
 
     \project{Fault-Tolerant Sharded Linearizable Distributed Key-Value Store}
-    {April 2024}
+    {May 2024}
     {
         Key-value store, built over the 
         \href{https://github.com/emichael/dslabs}{DSLabs} framework 
@@ -485,6 +501,8 @@
     }
 \end{cventries}
 
+\vspace{-3mm}
+
 \cvsection{Skills}
 
 \vspace{3.5mm}
@@ -502,6 +520,7 @@
         OCaml, 
         Python, 
         Rust, 
+        SQL,
         Verilog,
         % Natural Languages
         English,
@@ -511,11 +530,11 @@
 
   \cvskill
     {Frameworks/Libraries} 
-    {Node, NumPy, Pandas, PyTorch, ReactJS, Redux, Scikit-Learn, Yacc} 
+    {Node.js, NumPy, Pandas, PyTorch, ReactJS, Redux, Scikit-Learn, Yacc} 
 
   \cvskill
     {Tools} 
-    {Docker, Flask, Git, GitHub, Linux (Arch and Ubuntu), Unix, Vim}
+    {Docker, Flask, Git, GitHub CI/CD, Jupyter Notebook, Linux (Arch and Ubuntu), Unix, Vim}
 \end{cvskills}
 
 \makecvfooter
